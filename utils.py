@@ -1,7 +1,6 @@
 from datasets import load_dataset
 import pandas as pd
 import numpy as np
-import nltk
 import string
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
@@ -11,9 +10,8 @@ from nltk.corpus import stopwords
 from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
 from sklearn.feature_extraction.text import TfidfTransformer
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.preprocessing import normalize
-from scipy.sparse import csr_matrix
 from sklearn.metrics.pairwise import cosine_similarity
 
 
@@ -27,19 +25,15 @@ def extract_wiki_data(dataset, rows):
     
 def normalize_text(data, mode = 'docs'):
     if mode == 'docs':
-        
-        #lowercase transformation
         data = data.apply(lambda x: x.lower())
         data = data.apply(remove_punctuation)
         data = data.replace('\n\n', ' ', regex=True)
         data = data.replace('\n', ' ', regex=True)
         lemmatized_data = data.apply(tokenize_and_lemmatize_text)
-        # lemmatized_data = lemmatized_data.apply(remove_stopwords)
     elif mode == 'query':
         data = data.lower()
         data = remove_punctuation(data)
         lemmatized_data = tokenize_and_lemmatize_text(data)
-        # lemmatized_data = remove_stopwords(lemmatized_data)
     else:
         raise ValueError('mode must be either "docs" or "query" ')
 
@@ -47,7 +41,6 @@ def normalize_text(data, mode = 'docs'):
 
 
 def remove_punctuation(text):
-    #removed - for hypenated words not to be separated
     exclude = set(string.punctuation) - set('-')
     #add some specific punctuations not present in the default
     exclude.add('“')
@@ -121,17 +114,12 @@ def calculate_tfidf(data, query=None, mode="docs"):
 
 
     if mode == 'docs':
-
         return tfidf_matrix
 
     elif mode == "query":
-
         query = ' '.join(query)
-
         query_tf_vector = cv.transform([query]).toarray()
-
         query_tfidf_vector = tfidf_transformer.transform(query_tf_vector)
-
         return query_tfidf_vector
 
     else:

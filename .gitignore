@@ -156,3 +156,4 @@ cython_debug/
 .idea/
 wikipedia.csv
 wikipedia_norm.csv
+zipfs_law.png
