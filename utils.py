@@ -42,7 +42,7 @@ def normalize_text(data, mode = 'docs'):
 
 def remove_punctuation(text):
     exclude = set(string.punctuation) - set('-')
-    #add some specific punctuations not present in the default
+    #add specific punctuations not present in the default
     exclude.add('“')
     exclude.add('”')
     exclude.add('–')
